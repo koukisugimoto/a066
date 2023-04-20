@@ -1,0 +1,58 @@
+works_count = int(input())
+
+
+max_days = 0
+maybe_max = 0
+days_list = []
+
+
+# 全てinputしてからsortして、必ずスタートの日が小さい順番になるようにする
+for i in range(works_count):
+    input_N = input().split()
+    map_input = map(int, input_N)
+    int_list = list(map_input)
+
+    # 後の計算の誤差を無くすため(1 - 7だったら 7連勤にするために 7-1+1 をするなどの手間を省く)
+    int_list[1] += 1
+
+    days_list.append(int_list)
+    days_list.sort()
+
+
+    #ある仕事の期間に内包している仕事を削除する
+    num = len(days_list)
+    count = 1
+
+while count < num:
+    if days_list[count][1] < days_list[count - 1][1]:
+        days_list.pop(count)
+        num = len(days_list)
+
+    else:
+        count += 1
+
+else:
+    pass
+
+
+#連勤日数を調べる
+for j in range(len(days_list)):
+
+    if j == 0:
+        maybe_max = days_list[0][1] - days_list[0][0]
+        max_days = maybe_max
+
+    else:
+
+        if days_list[j][0] <= days_list[j - 1 - count][1]:
+            maybe_max += (days_list[j][1] - days_list[j][0]) - (days_list[j - 1 - count][1] - days_list[j][0])
+            max_days = maybe_max if maybe_max > max_days else max_days
+
+        
+        else:
+            maybe_max = days_list[j][1] - days_list[j][0]
+            max_days = maybe_max if maybe_max > max_days else max_days
+
+
+print(max_days)
+
